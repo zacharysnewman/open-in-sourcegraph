@@ -28,6 +28,13 @@ export function activate(context: vscode.ExtensionContext) {
       );
       const basePath = config.get<string>("basePath", "");
 
+      if (!instanceUrl.trim()) {
+        vscode.window.showErrorMessage(
+          "Open in Sourcegraph: instanceUrl is not configured. Please set it in your settings."
+        );
+        return;
+      }
+
       // Extract repository name from workspace folder
       const repoName = workspaceFolder.name;
 
