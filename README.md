@@ -7,7 +7,7 @@
 ## Features
 
 - **Quick Access:** Open any file in Sourcegraph directly from VS Code.
-- **Customizable Settings:** Configure the Sourcegraph subdomain and base path to match your project's structure.
+- **Customizable Settings:** Configure the Sourcegraph instance URL and optional base path to match your project's structure.
 - **Seamless Integration:** Integrates with the VS Code explorer context menu for easy access.
 
 ## Installation
@@ -26,59 +26,62 @@
    - Search for **Open in Sourcegraph** to find the extension's settings.
    - Set the following configuration options:
 
-     - **Sourcegraph Subdomain (`openInSourcegraph.sourcegraphSubdomain`):**
+     - **Instance URL (`openInSourcegraph.instanceUrl`):**
 
-       - The subdomain of your Sourcegraph instance (e.g., "company").
+       - The full URL of your Sourcegraph instance (e.g., `https://sourcegraph.mycompany.com`).
 
-     - **Base Path (`openInSourcegraph.basePath`):**
+     - **Base Path (`openInSourcegraph.basePath`):** _(optional)_
 
-       - The base path used in the Sourcegraph URL (e.g., "code.company.com/path").
+       - An optional base path inserted between the instance URL and the repository name (e.g., `code.company.com/path`).
 
 2. **Using the Extension:**
 
-   - In the VS Code explorer, right-click on a file.
-   - Select **Open in Sourcegraph** from the context menu.
+   - In the VS Code explorer, right-click on a file and select **Open in Sourcegraph**, or
+   - Open a file in the editor and run **Open in Sourcegraph** from the command palette (`Ctrl+Shift+P` / `Cmd+Shift+P`).
    - The corresponding file will open in your default web browser via Sourcegraph.
 
 ## Configuration Options
 
-The extension can be customized through the following settings:
-
-### `openInSourcegraph.sourcegraphSubdomain`
+### `openInSourcegraph.instanceUrl`
 
 - **Type:** `string`
-- **Default:** "your-subdomain"
-- **Description:** The subdomain of your Sourcegraph instance. For example, if your Sourcegraph URL is `https://company.sourcegraph.com`, set this to "company".
+- **Default:** `"https://sourcegraph.com"`
+- **Description:** The full URL of your Sourcegraph instance. Use this for both Sourcegraph Cloud and self-hosted instances.
 
 ### `openInSourcegraph.basePath`
 
 - **Type:** `string`
-- **Default:** "your-base-path"
-- **Description:** The base path in the Sourcegraph URL after the domain. This may include paths specific to your organization's Sourcegraph setup.
+- **Default:** `""`
+- **Description:** An optional base path in the Sourcegraph URL after the domain. This may include paths specific to your organization's Sourcegraph setup.
 
 ## Example Configuration
 
-You should configure the extension settings as follows:
+### Sourcegraph Cloud
 
-- **Sourcegraph Subdomain:**
+- **Instance URL:** `https://sourcegraph.com`
+- **Base Path:** _(leave empty)_
 
-  "company"
-
-- **Base Path:**
-
-  "code.company.com/path"
-
-With these settings, the extension constructs the Sourcegraph URL as:
-
+Constructs:
 ```
-https://company.sourcegraph.com/code.company.com/path/<workspace-folder>/-/blob/<relativeFilePath>
+https://sourcegraph.com/<workspace-folder>/-/blob/<relativeFilePath>
+```
+
+### Self-hosted Sourcegraph
+
+- **Instance URL:** `https://sourcegraph.mycompany.com`
+- **Base Path:** `code.company.com/path`
+
+Constructs:
+```
+https://sourcegraph.mycompany.com/code.company.com/path/<workspace-folder>/-/blob/<relativeFilePath>
 ```
 
 ## Troubleshooting
 
 - **Incorrect URL Structure:**
 
-  - Double-check your `sourcegraphSubdomain` and `basePath` settings to ensure they match your organization's Sourcegraph URL structure.
+  - Ensure `instanceUrl` is the full URL including `https://` and no trailing slash.
+  - Leave `basePath` empty if your Sourcegraph instance doesn't require one.
 
 ## License
 

@@ -58,15 +58,15 @@
       "type": "object",
       "title": "Open in Sourcegraph Configuration",
       "properties": {
-        "openInSourcegraph.sourcegraphSubdomain": {
+        "openInSourcegraph.instanceUrl": {
           "type": "string",
-          "default": "your-subdomain",
-          "description": "The Sourcegraph subdomain for your organization."
+          "default": "https://sourcegraph.com",
+          "description": "The full URL of your Sourcegraph instance (e.g., 'https://sourcegraph.mycompany.com')."
         },
         "openInSourcegraph.basePath": {
           "type": "string",
-          "default": "your-base-path",
-          "description": "The base path used in the Sourcegraph URL."
+          "default": "",
+          "description": "Optional base path inserted between the instance URL and repository name (e.g., 'code.company.com/path')."
         }
       }
     }
