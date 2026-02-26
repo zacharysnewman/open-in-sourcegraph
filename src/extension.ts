@@ -5,8 +5,15 @@ export function activate(context: vscode.ExtensionContext) {
   let disposable = vscode.commands.registerCommand(
     "openInSourcegraph.open",
     (uri: vscode.Uri) => {
-      const filePath = uri.fsPath;
-      const workspaceFolder = vscode.workspace.getWorkspaceFolder(uri);
+      const resolvedUri = uri ?? vscode.window.activeTextEditor?.document.uri;
+
+      if (!resolvedUri) {
+        vscode.window.showErrorMessage("No file is currently open.");
+        return;
+      }
+
+      const filePath = resolvedUri.fsPath;
+      const workspaceFolder = vscode.workspace.getWorkspaceFolder(resolvedUri);
 
       if (!workspaceFolder) {
         vscode.window.showErrorMessage("Workspace folder not found.");
@@ -15,11 +22,11 @@ export function activate(context: vscode.ExtensionContext) {
 
       // Read settings from configuration
       const config = vscode.workspace.getConfiguration("openInSourcegraph");
-      const subdomain = config.get<string>(
-        "sourcegraphSubdomain",
-        "your-subdomain"
+      const instanceUrl = config.get<string>(
+        "instanceUrl",
+        "https://sourcegraph.com"
       );
-      const basePath = config.get<string>("basePath", "your-base-path");
+      const basePath = config.get<string>("basePath", "");
 
       // Extract repository name from workspace folder
       const repoName = workspaceFolder.name;
@@ -31,7 +38,11 @@ export function activate(context: vscode.ExtensionContext) {
       );
 
       // Construct the Sourcegraph URL
-      const sourceGraphUrl = `https://${subdomain}.sourcegraph.com/${basePath}/${repoName}/-/blob/${relativeFilePath}`;
+      const base = instanceUrl.replace(/\/$/, "");
+      const pathParts = [basePath, repoName, "-/blob", relativeFilePath]
+        .filter(Boolean)
+        .join("/");
+      const sourceGraphUrl = `${base}/${pathParts}`;
 
       // Debugging: log the constructed URL
       console.log("SourceGraph URL:", sourceGraphUrl);
