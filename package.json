@@ -1,9 +1,9 @@
 {
-  "name": "open-in-sourcegraph",
-  "displayName": "Open in Sourcegraph",
-  "description": "Quickly open files in Sourcegraph from VS Code",
-  "version": "0.0.4",
-  "publisher": "zacharysnewman",
+  "name": "open-in-sourcegraph-2",
+  "displayName": "Open in Sourcegraph 2",
+  "description": "Quickly open files in Sourcegraph from VS Code. Forked from Zach Newman's original extension to add support for custom base paths and repository aliases.",
+  "version": "1.0.2",
+  "publisher": "aleggs",
   "engines": {
     "vscode": "^1.94.0"
   },
@@ -20,7 +20,7 @@
   "main": "./out/extension.js",
   "scripts": {
     "vscode:prepublish": "npm run compile",
-    "login": "npx vsce login zacharysnewman",
+    "login": "npx vsce login aleggs",
     "publish": "npx vsce publish minor",
     "compile": "tsc -p ./",
     "watch": "tsc -watch -p ./",
@@ -31,12 +31,12 @@
   "activationEvents": [],
   "repository": {
     "type": "git",
-    "url": "https://github.com/zacharysnewman/open-in-sourcegraph.git"
+    "url": "https://github.com/aleggs/open-in-sourcegraph.git"
   },
   "bugs": {
-    "url": "https://github.com/zacharysnewman/open-in-sourcegraph/issues"
+    "url": "https://github.com/aleggs/open-in-sourcegraph/issues"
   },
-  "homepage": "https://github.com/zacharysnewman/open-in-sourcegraph#readme",
+  "homepage": "https://github.com/aleggs/open-in-sourcegraph#readme",
   "license": "MIT",
   "contributes": {
     "commands": [
@@ -67,6 +67,11 @@
           "type": "string",
           "default": "your-base-path",
           "description": "The base path used in the Sourcegraph URL."
+        },
+        "openInSourcegraph.repoAlias": {
+          "type": "string",
+          "default": "",
+          "description": "Optional: The repository alias to use in the Sourcegraph URL. If left blank, the repository name will be used."
         }
       }
     }

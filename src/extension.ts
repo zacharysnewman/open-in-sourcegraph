@@ -20,9 +20,10 @@ export function activate(context: vscode.ExtensionContext) {
         "your-subdomain"
       );
       const basePath = config.get<string>("basePath", "your-base-path");
-
+      
       // Extract repository name from workspace folder
-      const repoName = workspaceFolder.name;
+      const repoAlias = config.get<string>("repoAlias", "");
+      const repoName = repoAlias !== "" ? repoAlias : workspaceFolder.name;
 
       // Get the file path relative to the repository root
       const relativeFilePath = path.relative(
@@ -31,8 +32,11 @@ export function activate(context: vscode.ExtensionContext) {
       );
 
       // Construct the Sourcegraph URL
-      const sourceGraphUrl = `https://${subdomain}.sourcegraph.com/${basePath}/${repoName}/-/blob/${relativeFilePath}`;
 
+      // If the subdomain ends in a .com or similar domain ending, do not append .sourcegraph.com
+      const suffixes = [".net", ".com", ".org"];
+      const subdomainString = suffixes.some(suffix => subdomain.endsWith(suffix)) ? subdomain : `${subdomain}.sourcegraph.com`;
+      const sourceGraphUrl = `https://${subdomainString}/${basePath}/${repoName}/-/blob/${relativeFilePath}`;
       // Debugging: log the constructed URL
       console.log("SourceGraph URL:", sourceGraphUrl);
 
