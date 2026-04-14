@@ -20,8 +20,8 @@
   "main": "./out/extension.js",
   "scripts": {
     "vscode:prepublish": "npm run compile",
-    "login": "npx vsce login zacharysnewman",
-    "publish": "npx vsce publish ; npx ovsx publish -p $OVSX_TOKEN",
+    "login": "npx @vscode/vsce login zacharysnewman",
+    "publish": "npx @vscode/vsce publish ; npx ovsx publish -p $OVSX_TOKEN",
     "compile": "tsc -p ./",
     "watch": "tsc -watch -p ./",
     "pretest": "npm run compile && npm run lint",
