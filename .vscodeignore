@@ -1,5 +1,6 @@
 .git/
 .vscode/
+.claude/
 node_modules/
 src/
 tsconfig.json
