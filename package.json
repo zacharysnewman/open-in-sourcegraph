@@ -2,7 +2,7 @@
   "name": "open-in-sourcegraph",
   "displayName": "Open in Sourcegraph",
   "description": "Quickly open files in Sourcegraph from VS Code",
-  "version": "1.1.0",
+  "version": "1.1.1",
   "publisher": "zacharysnewman",
   "engines": {
     "vscode": "^1.94.0"

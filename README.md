@@ -14,7 +14,7 @@
 
 | Editor | Link |
 |--------|------|
-| VS Code | [Install from Marketplace](vscode:extension/zacharysnewman.open-in-sourcegraph) |
+| VS Code | [Install from Marketplace](https://marketplace.visualstudio.com/items?itemName=zacharysnewman.open-in-sourcegraph) |
 | Cursor / other VS Code-compatible editors | [Install from Open VSX](https://open-vsx.org/extension/zacharysnewman/open-in-sourcegraph) |
 
 Or search for **"Open in Sourcegraph"** in your editor's Extensions panel.
