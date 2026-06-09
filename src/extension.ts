@@ -5,8 +5,15 @@ export function activate(context: vscode.ExtensionContext) {
   let disposable = vscode.commands.registerCommand(
     "openInSourcegraph.open",
     (uri: vscode.Uri) => {
-      const filePath = uri.fsPath;
-      const workspaceFolder = vscode.workspace.getWorkspaceFolder(uri);
+      const resolvedUri = uri ?? vscode.window.activeTextEditor?.document.uri;
+
+      if (!resolvedUri) {
+        vscode.window.showErrorMessage("No file is currently open.");
+        return;
+      }
+
+      const filePath = resolvedUri.fsPath;
+      const workspaceFolder = vscode.workspace.getWorkspaceFolder(resolvedUri);
 
       if (!workspaceFolder) {
         vscode.window.showErrorMessage("Workspace folder not found.");
@@ -15,12 +22,19 @@ export function activate(context: vscode.ExtensionContext) {
 
       // Read settings from configuration
       const config = vscode.workspace.getConfiguration("openInSourcegraph");
-      const subdomain = config.get<string>(
-        "sourcegraphSubdomain",
-        "your-subdomain"
+      const instanceUrl = config.get<string>(
+        "instanceUrl",
+        "https://sourcegraph.com"
       );
-      const basePath = config.get<string>("basePath", "your-base-path");
-      
+      const basePath = config.get<string>("basePath", "");
+
+      if (!instanceUrl.trim()) {
+        vscode.window.showErrorMessage(
+          "Open in Sourcegraph: instanceUrl is not configured. Please set it in your settings."
+        );
+        return;
+      }
+
       // Extract repository name from workspace folder
       const repoAlias = config.get<string>("repoAlias", "");
       const repoName = repoAlias !== "" ? repoAlias : workspaceFolder.name;
@@ -32,13 +46,11 @@ export function activate(context: vscode.ExtensionContext) {
       );
 
       // Construct the Sourcegraph URL
-
-      // If the subdomain ends in a .com or similar domain ending, do not append .sourcegraph.com
-      const suffixes = [".net", ".com", ".org"];
-      const subdomainString = suffixes.some(suffix => subdomain.endsWith(suffix)) ? subdomain : `${subdomain}.sourcegraph.com`;
-      const sourceGraphUrl = `https://${subdomainString}/${basePath}/${repoName}/-/blob/${relativeFilePath}`;
-      // Debugging: log the constructed URL
-      console.log("SourceGraph URL:", sourceGraphUrl);
+      const base = instanceUrl.replace(/\/$/, "");
+      const pathParts = [basePath, repoName, "-/blob", relativeFilePath]
+        .filter(Boolean)
+        .join("/");
+      const sourceGraphUrl = `${base}/${pathParts}`;
 
       // Open the URL in the default browser
       vscode.env.openExternal(vscode.Uri.parse(sourceGraphUrl));
